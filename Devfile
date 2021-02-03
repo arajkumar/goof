@@ -1,0 +1,73 @@
+metadata:
+  name: nodejs-snyk-demo
+attributes:
+  persistVolumes: 'true'
+projects:
+  - name: nodejs-web-app
+    source:
+      location: 'https://github.com/pdaverh/snyk-demo'
+      type: git
+      branch: master
+components:
+  - type: chePlugin
+    reference: >-
+        https://raw.githubusercontent.com/arajkumar/goof/master/analytics-plugin.yml
+    alias: dependency-analytics
+  - id: che-incubator/typescript/latest
+    memoryLimit: 256Mi
+    type: chePlugin
+  - mountSources: true
+    endpoints:
+      - name: nodejs
+        port: 3000
+    memoryLimit: 256Mi
+    type: dockerimage
+    image: 'quay.io/eclipse/che-nodejs10-ubi:7.24.0'
+    alias: nodejs
+apiVersion: 1.0.0
+commands:
+  - name: stop the web app
+    actions:
+      - type: exec
+        command: >-
+          node_server_pids=$(pgrep -fx '.*nodemon (--inspect )?app.js' | tr
+          "\\n" " ") && echo "Stopping node server with PIDs:
+          ${node_server_pids}" &&  kill -15 ${node_server_pids} &>/dev/null &&
+          echo 'Done.'
+        component: nodejs
+  - name: download dependencies
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/nodejs-web-app/app'
+        type: exec
+        command: npm install
+        component: nodejs
+  - name: run the web app
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/nodejs-web-app/app'
+        type: exec
+        command: nodemon app.js
+        component: nodejs
+  - name: Attach remote debugger
+    actions:
+      - referenceContent: |
+          {
+            "version": "0.3.0",
+            "configurations": [
+              {
+                "type": "node",
+                "request": "attach",
+                "name": "Attach to Remote",
+                "address": "localhost",
+                "port": 9229,
+                "localRoot": "${workspaceFolder}",
+                "remoteRoot": "${workspaceFolder}"
+              }
+            ]
+          }
+        type: vscode-launch
+  - name: run the web app (debugging enabled)
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/nodejs-web-app/app'
+        type: exec
+        command: nodemon --inspect app.js
+        component: nodejs
