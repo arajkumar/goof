@@ -5,13 +5,13 @@ attributes:
 projects:
   - name: nodejs-web-app
     source:
-      location: 'https://github.com/pdaverh/snyk-demo'
+      location: https://github.com/arajkumar/goof
       type: git
       branch: master
 components:
   - type: chePlugin
     reference: >-
-        https://raw.githubusercontent.com/arajkumar/goof/master/analytics-plugin.yaml
+        https://raw.githubusercontent.com/arajkumar/goof/devfile/analytics-plugin.yaml
     alias: dependency-analytics
   - id: che-incubator/typescript/latest
     memoryLimit: 256Mi
