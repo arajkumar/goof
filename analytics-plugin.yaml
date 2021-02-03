@@ -13,6 +13,6 @@ firstPublicationDate: '2019-09-12'
 spec:
   containers:
     - image: "quay.io/eclipse/che-sidecar-dependency-analytics:0.0.13-9e9c7a9"
-      memoryLimit: "256Mi"
+      memoryLimit: "512Mi"
   extensions:
     - https://download.jboss.org/jbosstools/vscode/stable/vscode-dependency-analytics/fabric8-analytics-0.3.1-15.vsix

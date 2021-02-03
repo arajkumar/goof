@@ -11,7 +11,7 @@ projects:
 components:
   - type: chePlugin
     reference: >-
-        https://raw.githubusercontent.com/arajkumar/goof/devfile/analytics-plugin.yaml
+        https://raw.githubusercontent.com/arajkumar/goof/master/analytics-plugin.yaml
     alias: dependency-analytics
   - id: che-incubator/typescript/latest
     memoryLimit: 256Mi
